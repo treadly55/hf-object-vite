@@ -1,40 +1,25 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+/* Reset / Basic body styling */
+body {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  padding: 1rem; /* Add some padding */
+  box-sizing: border-box; /* Include padding in sizing */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Vite App container (optional styling) */
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -42,27 +27,59 @@ h1 {
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+/* Image container */
+#image-container {
+  position: relative;
+  display: inline-block;
+  max-width: 90%;
+  border: 1px solid #555;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  vertical-align: top;
 }
 
-.card {
-  padding: 2em;
+/* Image styling */
+#test-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
-.read-the-docs {
-  color: #888;
+/* Bounding Box Styles */
+.bounding-box {
+  position: absolute;
+  border: 2px solid red; /* Default, JS overrides */
+  box-sizing: border-box;
+  pointer-events: none;
 }
 
+.bounding-box-label {
+  position: absolute;
+  top: -1.2em;
+  left: -2px;
+  color: white;
+  font-size: 0.8em;
+  padding: 2px 4px;
+  white-space: nowrap;
+  background-color: red; /* Default, JS overrides */
+}
+
+/* List styling */
+#detection-list-container {
+    text-align: left;
+    margin-top: 1rem;
+}
+#detection-list {
+    margin-top: 5px;
+    padding-left: 20px;
+}
+
+/* Controls styling */
+.upload-controls label {
+  margin-right: 10px;
+}
+
+/* Button styling */
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -73,6 +90,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin-top: 1rem;
 }
 button:hover {
   border-color: #646cff;
@@ -81,7 +99,23 @@ button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  border-color: transparent;
+}
 
+/* Link styling (if any) */
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/* Dark/Light theme consistency */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
