@@ -1,4 +1,4 @@
-// main.js (for Vite project - with Timer Test) - RE-VERIFIED SYNTAX
+// main.js (for Vite project - with Count-Up Timer Test)
 import './style.css'; // Import CSS - Vite handles this
 
 // Import the worker using Vite's special syntax
@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
     let worker = null;
     let isDetectorReady = false; // Track model readiness via worker
     let timerIntervalId = null;  // To store the timer interval ID
-    const timerStartValue = 10;  // Countdown starts from 10 seconds
-    let timerCountdownValue = timerStartValue;
+    let timerElapsedTime = 0;    // To store elapsed seconds for count-up
 
     // --- DOM Elements ---
     const statusElement = document.getElementById('status');
@@ -26,41 +25,49 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
     // --- Timer Functions ---
     function updateTimerDisplay() {
+        // Display elapsed time
         if (timerDisplayElement) {
-            timerDisplayElement.textContent = timerCountdownValue >= 0 ? `UI Test Timer: ${timerCountdownValue}` : '';
+            // Show only when timer is active (intervalId is not null)
+            timerDisplayElement.textContent = timerIntervalId !== null ? `UI Test Timer: ${timerElapsedTime}s` : '';
         }
     }
 
     function resetTimer() {
+        // Clears interval, resets time, clears display
         if (timerIntervalId !== null) {
             clearInterval(timerIntervalId);
             timerIntervalId = null;
         }
-        timerCountdownValue = timerStartValue;
-        // Update display to show initial state or clear it
-        if (timerDisplayElement) {
-             timerDisplayElement.textContent = ''; // Clear display on reset
-        }
-        // updateTimerDisplay(); // Or call this to show the reset value immediately if desired
+        timerElapsedTime = 0;
+        updateTimerDisplay(); // Update display to clear it
+        console.log('[Main] Timer reset.');
     }
 
     function startTimer() {
         resetTimer(); // Clear previous timer and reset value first
-        updateTimerDisplay(); // Show starting value immediately
-        // Avoid modifying statusElement directly here, rely on DETECT start message perhaps
-        // statusElement.textContent += ' (Timer Started)';
+        timerElapsedTime = 0; // Explicitly set to 0
+        updateTimerDisplay(); // Show "0s" immediately
 
+        // Start interval to increment elapsed time
         timerIntervalId = setInterval(() => {
-            timerCountdownValue--;
+            timerElapsedTime++;
             updateTimerDisplay();
-            // console.log(`[Main] Timer tick: ${timerCountdownValue}`); // Optional debug log
-
-            if (timerCountdownValue < 0) {
-                clearInterval(timerIntervalId);
-                timerIntervalId = null;
-                console.log('[Main] Timer finished.');
-            }
+            // console.log(`[Main] Timer tick: ${timerElapsedTime}`); // Optional debug log
         }, 1000); // Update every 1 second
+        console.log('[Main] Timer started.');
+    }
+
+    function stopTimer() {
+        // Clears interval, keeps last displayed value until reset
+        if (timerIntervalId !== null) {
+            clearInterval(timerIntervalId);
+            timerIntervalId = null;
+            console.log('[Main] Timer stopped.');
+            // Optionally update status or display final time
+             if (timerDisplayElement) {
+                timerDisplayElement.textContent += ` (Stopped)`;
+             }
+        }
     }
 
     // --- Initialize Worker ---
@@ -77,22 +84,22 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         statusElement.textContent = 'Error: Could not initialize background processor.';
         if(detectButton) detectButton.disabled = true;
         if(fileInput) fileInput.disabled = true;
-        // Optionally re-throw if initialization is critical
-        // throw new Error("Worker initialization failed.");
         return; // Exit if worker creation fails
     }
 
     // --- Worker Message & Error Handlers ---
     worker.onmessage = (event) => {
         const message = event.data;
-        // Log only non-progress messages here if desired
         if (message.type !== 'DOWNLOAD_PROGRESS') {
             console.log('[Main] Message received from AI worker:', message);
         }
 
         switch (message.type) {
             case 'STATUS_UPDATE':
-                statusElement.textContent = message.payload;
+                // Avoid overwriting status if timer is actively mentioned
+                if (!statusElement.textContent.includes('Timer Running')) {
+                    statusElement.textContent = message.payload;
+                }
                 break;
 
             case 'DOWNLOAD_PROGRESS':
@@ -117,8 +124,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 break;
 
             case 'DETECTION_RESULT':
-                // Clean up timer status message part if detection finishes before timer
-                statusElement.textContent = statusElement.textContent.replace(' (Timer Started)', ''); // Example cleanup if added
                 const output = message.payload.output;
                 statusElement.textContent = `Detection complete. Found ${output.length} objects.`;
 
@@ -147,23 +152,20 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                         detectionListElement.appendChild(listItem);
                     }
                 }
-                // Re-enable button only if the timer hasn't been reset by another action
-                if (timerIntervalId !== null || timerCountdownValue >= 0) {
-                    // Or simply always enable if appropriate
-                }
-                 detectButton.disabled = false; // Re-enable button
+                // --- STOP TIMER HERE ---
+                stopTimer();
+                detectButton.disabled = false; // Re-enable button
                 break;
 
             case 'ERROR':
                 statusElement.textContent = `Error: ${message.payload}`;
-                console.error('[Main] Error message from worker:', message.payload); // Keep specific error log
+                console.error('[Main] Error message from worker:', message.payload);
                 isDetectorReady = false;
                 detectButton.disabled = true;
-                resetTimer(); // Also reset timer on error
+                resetTimer(); // Reset timer on error
                 break;
 
             default:
-                // Log only unhandled messages generically
                 console.log('[Main] Message received from AI worker (unhandled type):', message);
                 console.warn('[Main] Received unknown message type from worker:', message.type);
         }
@@ -178,13 +180,14 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         resetTimer(); // Reset timer on critical worker error
     }; // <<< End of worker.onerror handler
 
-    // --- UI Helper Functions ---
+    // --- UI Helper Functions --- (Keep drawObjectBox and clearBoundingBoxes as they were)
     function clearBoundingBoxes() {
         const existingBoxes = imageContainer.querySelectorAll('.bounding-box');
         existingBoxes.forEach(box => box.remove());
     } // <<< End of clearBoundingBoxes
 
     function drawObjectBox(detectedObject) {
+        // ... (drawObjectBox function code remains the same) ...
         const { label, score, box } = detectedObject;
         const { xmax, xmin, ymax, ymin } = box;
         const color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
@@ -233,15 +236,15 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 } else {
                     statusElement.textContent = 'Image loaded. Waiting for model...';
                 }
-            }; // <<< End of imageElement.onload
+            };
              imageElement.onerror = () => {
                  statusElement.textContent = 'Error displaying image.';
-             }; // <<< End of imageElement.onerror
-        }; // <<< End of reader.onload
+             }
+        };
         reader.onerror = (e) => {
             console.error("File reading error:", e);
             statusElement.textContent = 'Error reading file.';
-        }; // <<< End of reader.onerror
+        };
         reader.readAsDataURL(file);
     } // <<< End of handleImageUpload
 
@@ -280,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
     // Initial status update
     statusElement.textContent = 'App initialized. Waiting for worker...';
+    resetTimer(); // Ensure timer display is clear initially
 
     console.log('[Main] Main script initialization complete.');
 
