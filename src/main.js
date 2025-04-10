@@ -39,33 +39,36 @@ try {
 }
 
 // --- Worker Message & Error Handlers ---
+// Listener for messages FROM the AI worker
 worker.onmessage = (event) => {
     const message = event.data;
-    console.log('[Main] Message received from AI worker:', message);
+    // Generic log moved inside 'default' case below
 
     switch (message.type) {
         case 'STATUS_UPDATE':
+            console.log('[Main] Received STATUS_UPDATE:', message.payload); // More specific log
             statusElement.textContent = message.payload;
             break;
 
         case 'DOWNLOAD_PROGRESS':
-             // Handle progress updates (e.g., update a progress bar or status text)
-             const progressData = message.payload;
-             if (progressData.status === 'progress') {
-                  const percentage = (progressData.progress || 0).toFixed(2);
-                  statusElement.textContent = `Downloading model: <span class="math-inline">\{progressData\.file\} \(</span>{percentage}%)`;
-             } else if (progressData.status === 'done') {
-                  statusElement.textContent = `Finished downloading: ${progressData.file}`;
-             } else {
-                 // Handle other statuses like 'initiate' if needed
-                 statusElement.textContent = `Model download status: ${progressData.status}`;
-             }
-             break;
+            // Log progress specifically if needed for debugging, otherwise just update UI
+            // console.log('[Main] Received DOWNLOAD_PROGRESS:', message.payload);
+            const progressData = message.payload;
+            if (progressData.status === 'progress') {
+                 const percentage = (progressData.progress || 0).toFixed(2);
+                 statusElement.textContent = `Downloading model: <span class="math-inline">\{progressData\.file\} \(</span>{percentage}%)`;
+            } else if (progressData.status === 'done') {
+                 // Briefly show 'done' message before MODEL_READY potentially overrides it
+                 statusElement.textContent = `Finished downloading: ${progressData.file}`;
+            } else {
+                statusElement.textContent = `Model download status: ${progressData.status}`;
+            }
+            break;
 
         case 'MODEL_READY':
+            console.log('[Main] Received MODEL_READY'); // Specific log
             statusElement.textContent = 'Model ready. Select an image.';
             isDetectorReady = true;
-            // Enable button only if an image source exists and has dimensions
             if (imageElement.src && imageElement.naturalWidth > 0) {
                 detectButton.disabled = false;
                 statusElement.textContent = 'Model ready. Ready to detect.';
@@ -73,6 +76,7 @@ worker.onmessage = (event) => {
             break;
 
         case 'DETECTION_RESULT':
+            console.log('[Main] Received DETECTION_RESULT'); // Specific log
             const output = message.payload.output;
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
@@ -90,9 +94,9 @@ worker.onmessage = (event) => {
                         detectionListElement.appendChild(listItem);
                     }
                 });
-                 if (output.length > limitedOutput.length) {
-                     statusElement.textContent += ` Displaying top ${limitedOutput.length}.`;
-                 }
+                if (output.length > limitedOutput.length) {
+                    statusElement.textContent += ` Displaying top ${limitedOutput.length}.`;
+                }
             } else {
                 statusElement.textContent = 'Detection complete. No objects found.';
                 if (detectionListElement) {
@@ -105,13 +109,16 @@ worker.onmessage = (event) => {
             break;
 
         case 'ERROR':
+            // Error already logged by the line below this switch
             statusElement.textContent = `Error: ${message.payload}`;
-            console.error('[Main] Error message from worker:', message.payload);
+            console.error('[Main] Error message from worker:', message.payload); // Keep specific error log
             isDetectorReady = false;
             detectButton.disabled = true;
             break;
 
         default:
+            // Log only unhandled messages generically
+            console.log('[Main] Message received from AI worker (unhandled type):', message);
             console.warn('[Main] Received unknown message type from worker:', message.type);
     }
 };
