@@ -112,27 +112,57 @@ p {
 .upload-controls {
     margin-top: 2rem; /* Increased spacing */
     margin-bottom: 1.5rem;
+    text-align: center; /* Center the upload section */
 }
 
 .upload-controls label {
-  margin-right: 10px;
-  font-size: 1.1rem; /* Larger label */
+  display: block; /* Stack label above input */
+  margin-bottom: 1rem; /* Space between label and input */
+  font-size: 1.2rem; /* Larger label */
   font-weight: 500;
+}
+
+/* File input styling */
+#image-upload {
+  padding: 1rem 2rem; /* Much bigger padding */
+  font-size: 1.1rem; /* Larger text */
+  border: 2px solid var(--accent-primary); /* Accent border */
+  border-radius: 8px;
+  background-color: #1a1a1a;
+  color: var(--accent-primary);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin: 0 auto; /* Center the input */
+  display: inline-block;
+  min-width: 200px; /* Minimum width for consistency */
+}
+
+#image-upload:hover {
+  border-color: var(--accent-secondary);
+  background-color: rgba(100, 108, 255, 0.1);
+}
+
+#image-upload:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
 }
 
 /* Button styling */
 button {
   border-radius: 8px;
   border: 2px solid var(--accent-primary); /* Accent border */
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
+  padding: 1rem 2rem; /* Much bigger padding */
+  font-size: 1.2rem; /* Larger font size */
+  font-weight: 600; /* Bolder text */
   font-family: inherit;
   background-color: #1a1a1a;
   color: var(--accent-primary); /* Accent text color */
   cursor: pointer;
   transition: all 0.25s ease; /* Smoother transition */
-  margin-top: 1rem;
+  margin-top: 1.5rem; /* More top margin */
+  min-width: 200px; /* Consistent minimum width */
+  text-transform: uppercase; /* Make text more prominent */
+  letter-spacing: 0.5px; /* Slight letter spacing */
 }
 button:hover {
   border-color: var(--accent-secondary);
