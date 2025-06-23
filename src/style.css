@@ -160,9 +160,23 @@ button {
   cursor: pointer;
   transition: all 0.25s ease; /* Smoother transition */
   margin-top: 1.5rem; /* More top margin */
+  margin-left: 0.5rem; /* Space between buttons */
+  margin-right: 0.5rem; /* Space between buttons */
   min-width: 200px; /* Consistent minimum width */
   text-transform: uppercase; /* Make text more prominent */
   letter-spacing: 0.5px; /* Slight letter spacing */
+}
+
+/* Clear button specific styling */
+#clear-button {
+  border-color: var(--accent-warning);
+  color: var(--accent-warning);
+}
+
+#clear-button:hover {
+  border-color: #fbbf24;
+  color: #fbbf24;
+  background-color: rgba(251, 191, 36, 0.1);
 }
 button:hover {
   border-color: var(--accent-secondary);
@@ -194,14 +208,38 @@ a:hover {
 #timer-display {
   min-height: 1.2em;
   color: var(--accent-warning); /* Accent color for timer */
-  font-size: 1.1rem; /* Larger timer text */
+  font-size: 1.4rem; /* Much larger timer text */
+  font-weight: 600; /* Bolder for prominence */
   margin-bottom: 1rem; /* More spacing */
+  text-align: center; /* Center the timer */
 }
 
 /* Status styling */
+.status-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.status-header {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 #status {
     color: rgba(255, 255, 255, 0.9);
     font-weight: 500;
+    font-size: 1.1rem;
+}
+
+.detection-notice {
+  font-size: 0.9rem;
+  color: #888;
+  font-style: italic;
+  margin-top: 0.5rem;
 }
 
 /* Dark/Light theme consistency */

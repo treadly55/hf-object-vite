@@ -281,10 +281,43 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         }); // <<< End of click listener callback
     } // <<< End of detectButton if block
 
+    // Clear/Restart Button Event Listener
+    const clearButton = document.getElementById('clear-button');
+    if (clearButton) {
+        clearButton.addEventListener('click', () => {
+            console.log('[Main] Clear button clicked - resetting app state.');
+            
+            // Reset timer
+            resetTimer();
+            
+            // Clear image
+            imageElement.src = '/example.jpg'; // Reset to default image
+            
+            // Clear file input
+            if (fileInput) fileInput.value = '';
+            
+            // Clear bounding boxes and detection results
+            clearBoundingBoxes();
+            if (detectionListElement) detectionListElement.innerHTML = '';
+            
+            // Reset status
+            if (isDetectorReady) {
+                statusElement.textContent = 'App reset. Model ready. Select an image.';
+                detectButton.disabled = false;
+            } else {
+                statusElement.textContent = 'App reset. Waiting for model...';
+                detectButton.disabled = true;
+            }
+            
+            console.log('[Main] App state reset complete.');
+        });
+    }
+
+
     // Initial status update
     statusElement.textContent = 'App initialized. Waiting for worker...';
     resetTimer(); // Ensure timer display is clear initially
 
     console.log('[Main] Main script initialization complete.');
 
-}); // <<< END of DOMContentLoaded listener
+});
