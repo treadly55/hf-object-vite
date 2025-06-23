@@ -111,40 +111,54 @@ p {
 /* Controls styling */
 .upload-controls {
     margin-top: 2rem; /* Increased spacing */
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     text-align: center; /* Center the upload section */
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.05); /* Subtle background */
+    border: 1px solid #444; /* Neutral border */
+    border-radius: 12px;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .upload-controls label {
   display: block; /* Stack label above input */
-  margin-bottom: 1rem; /* Space between label and input */
-  font-size: 1.2rem; /* Larger label */
+  margin-bottom: 1.5rem; /* Space between label and input */
+  font-size: 1.1rem; /* Professional size */
   font-weight: 500;
+  color: #e0e0e0; /* Neutral light gray */
+  text-transform: none; /* Keep normal case for formal look */
+  letter-spacing: normal;
 }
 
-/* File input styling */
+/* File input styling - Formal appearance */
 #image-upload {
-  padding: 1rem 2rem; /* Much bigger padding */
-  font-size: 1.1rem; /* Larger text */
-  border: 2px solid var(--accent-primary); /* Accent border */
-  border-radius: 8px;
-  background-color: #1a1a1a;
-  color: var(--accent-primary);
+  padding: 0.8rem 1.5rem; /* Professional padding */
+  font-size: 1rem; /* Standard readable size */
+  border: 2px solid #666; /* Neutral gray border */
+  border-radius: 6px; /* Subtle rounding */
+  background-color: #2a2a2a; /* Darker neutral background */
+  color: #e0e0e0; /* Light gray text */
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   margin: 0 auto; /* Center the input */
   display: inline-block;
   min-width: 200px; /* Minimum width for consistency */
+  font-family: inherit; /* Match body font */
+  text-transform: none; /* Normal case */
+  letter-spacing: normal;
 }
 
 #image-upload:hover {
-  border-color: var(--accent-secondary);
-  background-color: rgba(100, 108, 255, 0.1);
+  border-color: #888; /* Lighter gray on hover */
+  background-color: #333; /* Slightly lighter background */
 }
 
 #image-upload:focus {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid #999; /* Neutral focus outline */
   outline-offset: 2px;
+  border-color: #999;
 }
 
 /* Button styling */
@@ -159,12 +173,34 @@ button {
   color: var(--accent-primary); /* Accent text color */
   cursor: pointer;
   transition: all 0.25s ease; /* Smoother transition */
-  margin-top: 1.5rem; /* More top margin */
-  margin-left: 0.5rem; /* Space between buttons */
-  margin-right: 0.5rem; /* Space between buttons */
-  min-width: 200px; /* Consistent minimum width */
+  margin-top: 1rem; /* Vertical spacing between buttons */
+  margin-left: 0; /* Remove horizontal margins */
+  margin-right: 0; /* Remove horizontal margins */
+  min-width: 250px; /* Slightly wider for stacked layout */
+  width: 100%; /* Full width within container */
+  max-width: 300px; /* Maximum width limit */
   text-transform: uppercase; /* Make text more prominent */
   letter-spacing: 0.5px; /* Slight letter spacing */
+  display: block; /* Ensure buttons stack */
+  margin-left: auto; /* Center buttons */
+  margin-right: auto; /* Center buttons */
+}
+
+/* Button container for better control */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* Space between stacked elements */
+  margin-top: 2rem;
+}
+
+#detect-button {
+  order: 1; /* First button */
+}
+
+#clear-button {
+  order: 3; /* Last button */
 }
 
 /* Clear button specific styling */
@@ -240,6 +276,9 @@ a:hover {
   color: #888;
   font-style: italic;
   margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  order: 2; /* Place between buttons in flex container */
 }
 
 /* Dark/Light theme consistency */
@@ -269,4 +308,9 @@ a:hover {
   button:hover {
     background-color: rgba(100, 108, 255, 0.1);
   }
+}
+
+/* Utility Classes */
+.hidden {
+  display: none !important;
 }

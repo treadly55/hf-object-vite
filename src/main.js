@@ -115,47 +115,55 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 break;
 
             case 'MODEL_READY':
-                statusElement.textContent = 'Model ready. Select an image.';
+                statusElement.textContent = 'AI detector downloaded to your device';
                 isDetectorReady = true;
                 if (imageElement.src && imageElement.naturalWidth > 0) {
                     detectButton.disabled = false;
-                    statusElement.textContent = 'Model ready. Ready to detect.';
+                    statusElement.textContent = 'AI detector downloaded to your device.';
                 }
                 break;
 
             case 'DETECTION_RESULT':
-                const output = message.payload.output;
-                statusElement.textContent = `Detection complete. Found ${output.length} objects.`;
+    const output = message.payload.output;
+    statusElement.textContent = `Detection complete. Found ${output.length} objects.`;
 
-                clearBoundingBoxes();
-                if (detectionListElement) detectionListElement.innerHTML = '';
+    clearBoundingBoxes();
+    if (detectionListElement) detectionListElement.innerHTML = '';
 
-                if (output.length > 0) {
-                    const limitedOutput = output.slice(0, 15);
-                    limitedOutput.forEach(detectedObject => drawObjectBox(detectedObject));
-                    if (detectionListElement) {
-                         limitedOutput.forEach(detectedObject => {
-                             const { label, score } = detectedObject;
-                             const listItem = document.createElement('li');
-                             listItem.textContent = `${label}: ${Math.floor(score * 100)}%`;
-                             detectionListElement.appendChild(listItem);
-                         });
-                    }
-                    if (output.length > limitedOutput.length) {
-                        statusElement.textContent += ` Displaying top ${limitedOutput.length}.`;
-                    }
-                } else {
-                     statusElement.textContent = 'Detection complete. No objects found.';
-                    if (detectionListElement) {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = 'No objects detected above threshold.';
-                        detectionListElement.appendChild(listItem);
-                    }
-                }
-                // --- STOP TIMER HERE ---
-                stopTimer();
-                detectButton.disabled = false; // Re-enable button
-                break;
+    if (output.length > 0) {
+        const limitedOutput = output.slice(0, 15);
+        limitedOutput.forEach(detectedObject => drawObjectBox(detectedObject));
+        if (detectionListElement) {
+             limitedOutput.forEach(detectedObject => {
+                 const { label, score } = detectedObject;
+                 const listItem = document.createElement('li');
+                 listItem.textContent = `${label}: ${Math.floor(score * 100)}%`;
+                 detectionListElement.appendChild(listItem);
+             });
+        }
+        if (output.length > limitedOutput.length) {
+            statusElement.textContent += ` Displaying top ${limitedOutput.length}.`;
+        }
+    } else {
+         statusElement.textContent = 'Detection complete. No objects found.';
+        if (detectionListElement) {
+            const listItem = document.createElement('li');
+            listItem.textContent = 'No objects detected above threshold.';
+            detectionListElement.appendChild(listItem);
+        }
+    }
+    
+    // --- STOP TIMER HERE ---
+    stopTimer();
+    detectButton.disabled = false; // Re-enable button
+    
+    // --- SHOW CLEAR BUTTON AFTER FIRST SUCCESSFUL DETECTION ---
+    const clearButton = document.getElementById('clear-button');
+    if (clearButton && clearButton.classList.contains('hidden')) {
+        clearButton.classList.remove('hidden');
+        console.log('[Main] Clear button now visible after first detection.');
+    }
+    break;
 
             case 'ERROR':
                 statusElement.textContent = `Error: ${message.payload}`;
@@ -234,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                     statusElement.textContent = 'Image loaded. Ready to detect.';
                     detectButton.disabled = false;
                 } else {
-                    statusElement.textContent = 'Image loaded. Waiting for model...';
+                    statusElement.textContent = 'Image loaded. Waiting for AI model...';
                 }
             };
              imageElement.onerror = () => {

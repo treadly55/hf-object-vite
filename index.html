@@ -14,7 +14,6 @@
       <div class="status-section">
         <div class="status-header">Status</div>
         <p id="status">Initializing...</p>
-        <div class="detection-notice">Detection takes approximately 20 seconds</div>
       </div>
 
       <div id="timer-display" style="margin-top: 10px; font-weight: bold;"></div>
@@ -34,8 +33,11 @@
         <input type="file" id="image-upload" accept="image/*" style="margin-bottom: 10px;">
       </div>
 
-      <button id="detect-button" disabled>Detect Objects</button>
-      <button id="clear-button">Clear Image & Restart</button>
+      <div class="button-container">
+        <button id="detect-button" disabled>Detect Objects</button>
+        <div class="detection-notice">Detection takes approximately 20 seconds</div>
+        <button id="clear-button" class="hidden">Clear Image & Restart</button>
+      </div>
     </div>
 
     <script type="module" src="/src/main.js"></script>
