@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         // Display elapsed time
         if (timerDisplayElement) {
             // Show only when timer is active (intervalId is not null)
-            timerDisplayElement.textContent = timerIntervalId !== null ? `UI Test Timer: ${timerElapsedTime}s` : '';
+            timerDisplayElement.textContent = timerIntervalId !== null ? `Time elapsed: ${timerElapsedTime}s` : '';
         }
     }
 
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             console.log('[Main] Timer stopped.');
             // Optionally update status or display final time
              if (timerDisplayElement) {
-                timerDisplayElement.textContent += ` (Stopped)`;
+                timerDisplayElement.textContent += ` (Completed)`;
              }
         }
     }
@@ -179,6 +179,13 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                     }
                 }
                 
+                // Show detection results container after detection completes
+                const detectionListContainer = document.getElementById('detection-list-container');
+                if (detectionListContainer) {
+                    detectionListContainer.style.display = 'block';
+                    console.log('[Main] Detection results container now visible.');
+                }
+                
                 // --- STOP TIMER HERE ---
                 stopTimer();
                 detectButton.disabled = false; // Re-enable button
@@ -240,6 +247,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         resetTimer(); // <<< RESET TIMER HERE
         const file = event.target.files[0];
         const clearButton = document.getElementById('clear-button');
+        const detectionListContainer = document.getElementById('detection-list-container');
         
         if (!file || !file.type.startsWith('image/')) {
             statusElement.textContent = file ? 'Error: Please select an image file.' : 'No file selected.';
@@ -248,7 +256,8 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
             
-            // Hide clear button when no valid file is selected
+            // Hide detection results and clear button when no valid file is selected
+            if (detectionListContainer) detectionListContainer.style.display = 'none';
             if (clearButton && !clearButton.classList.contains('hidden')) {
                 clearButton.classList.add('hidden');
                 console.log('[Main] Clear button hidden - no valid image selected.');
@@ -258,6 +267,9 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
         clearBoundingBoxes();
         if (detectionListElement) detectionListElement.innerHTML = '';
+        // Hide detection results when new image is loaded
+        if (detectionListContainer) detectionListContainer.style.display = 'none';
+        
         statusElement.textContent = 'Loading image...';
         detectButton.disabled = true;
 
@@ -319,7 +331,13 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
             detectButton.disabled = true;
-            statusElement.textContent = 'Sending image to worker... (UI Timer Running)';
+            statusElement.textContent = 'AI detector working...';
+
+            // Hide detection results container during detection
+            const detectionListContainer = document.getElementById('detection-list-container');
+            if (detectionListContainer) {
+                detectionListContainer.style.display = 'none';
+            }
 
             // --- START TIMER HERE ---
             startTimer();
@@ -358,6 +376,13 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
             
+            // Hide detection results container on reset
+            const detectionListContainer = document.getElementById('detection-list-container');
+            if (detectionListContainer) {
+                detectionListContainer.style.display = 'none';
+                console.log('[Main] Detection results container hidden on reset.');
+            }
+            
             // Force hide clear button since we're back to default image
             clearButton.classList.add('hidden');
             console.log('[Main] Clear button forcibly hidden - back to default image.');
@@ -365,10 +390,10 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             
             // Reset status
             if (isDetectorReady) {
-                statusElement.textContent = 'App reset. Model successfully downloaded to device. Select an image.';
+                statusElement.textContent = 'App reset. AI successfully downloaded to device. Select an image.';
                 detectButton.disabled = false;
             } else {
-                statusElement.textContent = 'App reset. Waiting for model...';
+                statusElement.textContent = 'App reset. Waiting...';
                 detectButton.disabled = true;
             }
             
@@ -382,7 +407,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
     }
 
     // Initial status update
-    statusElement.textContent = 'App initialized. Waiting for worker...';
+    statusElement.textContent = 'App initialized. Waiting...';
     resetTimer(); // Ensure timer display is clear initially
 
     console.log('[Main] Main script initialization complete.');

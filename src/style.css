@@ -95,18 +95,21 @@ p {
 
 /* List styling */
 #detection-list-container {
-    text-align: left;
+    text-align: center; /* Center align the section */
     margin-top: 2rem; /* Increased spacing */
     font-size: 1.1rem; /* Larger text */
+    display: none; /* Hidden by default */
 }
 #detection-list {
     margin-top: 1rem; /* Increased spacing */
-    padding-left: 20px;
+    padding-left: 0; /* Remove default padding for center alignment */
+    list-style-position: inside; /* Keep bullets inside for center alignment */
 }
 
 #detection-list li {
     margin-bottom: 0.5rem; /* Spacing between items */
     color: var(--accent-success); /* Accent color for results */
+    text-align: center; /* Center align individual items */
 }
 
 /* Controls styling */
