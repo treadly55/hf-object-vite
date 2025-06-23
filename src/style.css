@@ -6,6 +6,7 @@
   --accent-warning: #fbbf24;
   --border-color: #555;
   --border-accent: #646cff;
+  scroll-behavior: smooth; /* Enable smooth scrolling globally */
 }
 
 body {

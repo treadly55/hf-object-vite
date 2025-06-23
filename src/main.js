@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
     let isDetectorReady = false; // Track model readiness via worker
     let timerIntervalId = null;  // To store the timer interval ID
     let timerElapsedTime = 0;    // To store elapsed seconds for count-up
+    let isUserUpload = false;    // Track if current image is from user upload
 
     // --- DOM Elements ---
     const statusElement = document.getElementById('status');
@@ -70,6 +71,31 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         }
     }
 
+    // --- Smooth Scroll Functions ---
+    function smoothScrollToElement(element, offset = 0) {
+        if (element) {
+            const elementPosition = element.offsetTop + offset;
+            window.scrollTo({
+                top: elementPosition,
+                behavior: 'smooth'
+            });
+            console.log(`[Main] Smooth scrolling to element:`, element.id || element.className);
+        }
+    }
+
+    function smoothScrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        console.log('[Main] Smooth scrolling to top of page.');
+    }
+
+    function smoothScrollToStatus() {
+        const statusSection = document.querySelector('.status-section');
+        smoothScrollToElement(statusSection, -20); // Slight offset for better positioning
+    }
+
     // --- Initialize Worker ---
     try {
         statusElement.textContent = 'Initializing background processor...';
@@ -115,55 +141,48 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 break;
 
             case 'MODEL_READY':
-                statusElement.textContent = 'AI detector downloaded to your device';
+                statusElement.textContent = 'Model successfully downloaded to device. Select an image.';
                 isDetectorReady = true;
                 if (imageElement.src && imageElement.naturalWidth > 0) {
                     detectButton.disabled = false;
-                    statusElement.textContent = 'AI detector downloaded to your device.';
+                    statusElement.textContent = 'Model successfully downloaded to device. Ready to detect.';
                 }
                 break;
 
             case 'DETECTION_RESULT':
-    const output = message.payload.output;
-    statusElement.textContent = `Detection complete. Found ${output.length} objects.`;
+                const output = message.payload.output;
+                statusElement.textContent = `Detection complete. Found ${output.length} objects.`;
 
-    clearBoundingBoxes();
-    if (detectionListElement) detectionListElement.innerHTML = '';
+                clearBoundingBoxes();
+                if (detectionListElement) detectionListElement.innerHTML = '';
 
-    if (output.length > 0) {
-        const limitedOutput = output.slice(0, 15);
-        limitedOutput.forEach(detectedObject => drawObjectBox(detectedObject));
-        if (detectionListElement) {
-             limitedOutput.forEach(detectedObject => {
-                 const { label, score } = detectedObject;
-                 const listItem = document.createElement('li');
-                 listItem.textContent = `${label}: ${Math.floor(score * 100)}%`;
-                 detectionListElement.appendChild(listItem);
-             });
-        }
-        if (output.length > limitedOutput.length) {
-            statusElement.textContent += ` Displaying top ${limitedOutput.length}.`;
-        }
-    } else {
-         statusElement.textContent = 'Detection complete. No objects found.';
-        if (detectionListElement) {
-            const listItem = document.createElement('li');
-            listItem.textContent = 'No objects detected above threshold.';
-            detectionListElement.appendChild(listItem);
-        }
-    }
-    
-    // --- STOP TIMER HERE ---
-    stopTimer();
-    detectButton.disabled = false; // Re-enable button
-    
-    // --- SHOW CLEAR BUTTON AFTER FIRST SUCCESSFUL DETECTION ---
-    const clearButton = document.getElementById('clear-button');
-    if (clearButton && clearButton.classList.contains('hidden')) {
-        clearButton.classList.remove('hidden');
-        console.log('[Main] Clear button now visible after first detection.');
-    }
-    break;
+                if (output.length > 0) {
+                    const limitedOutput = output.slice(0, 15);
+                    limitedOutput.forEach(detectedObject => drawObjectBox(detectedObject));
+                    if (detectionListElement) {
+                         limitedOutput.forEach(detectedObject => {
+                             const { label, score } = detectedObject;
+                             const listItem = document.createElement('li');
+                             listItem.textContent = `${label}: ${Math.floor(score * 100)}%`;
+                             detectionListElement.appendChild(listItem);
+                         });
+                    }
+                    if (output.length > limitedOutput.length) {
+                        statusElement.textContent += ` Displaying top ${limitedOutput.length}.`;
+                    }
+                } else {
+                     statusElement.textContent = 'Detection complete. No objects found.';
+                    if (detectionListElement) {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = 'No objects detected above threshold.';
+                        detectionListElement.appendChild(listItem);
+                    }
+                }
+                
+                // --- STOP TIMER HERE ---
+                stopTimer();
+                detectButton.disabled = false; // Re-enable button
+                break;
 
             case 'ERROR':
                 statusElement.textContent = `Error: ${message.payload}`;
@@ -220,12 +239,20 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
     function handleImageUpload(event) {
         resetTimer(); // <<< RESET TIMER HERE
         const file = event.target.files[0];
+        const clearButton = document.getElementById('clear-button');
+        
         if (!file || !file.type.startsWith('image/')) {
             statusElement.textContent = file ? 'Error: Please select an image file.' : 'No file selected.';
             if (fileInput) fileInput.value = '';
             detectButton.disabled = true;
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
+            
+            // Hide clear button when no valid file is selected
+            if (clearButton && !clearButton.classList.contains('hidden')) {
+                clearButton.classList.add('hidden');
+                console.log('[Main] Clear button hidden - no valid image selected.');
+            }
             return;
         }
 
@@ -236,22 +263,39 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
         const reader = new FileReader();
         reader.onload = (e) => {
+            isUserUpload = true; // Mark this as a user upload
             imageElement.src = e.target.result;
             imageElement.onload = () => {
                 if (isDetectorReady) {
                     statusElement.textContent = 'Image loaded. Ready to detect.';
                     detectButton.disabled = false;
                 } else {
-                    statusElement.textContent = 'Image loaded. Waiting for AI model...';
+                    statusElement.textContent = 'Image loaded. Waiting for model...';
+                }
+                
+                // Show clear button ONLY for user uploads
+                if (isUserUpload && clearButton && clearButton.classList.contains('hidden')) {
+                    clearButton.classList.remove('hidden');
+                    console.log('[Main] Clear button now visible - user uploaded image.');
                 }
             };
              imageElement.onerror = () => {
                  statusElement.textContent = 'Error displaying image.';
+                 // Hide clear button on image load error
+                 if (clearButton && !clearButton.classList.contains('hidden')) {
+                     clearButton.classList.add('hidden');
+                     console.log('[Main] Clear button hidden - image load error.');
+                 }
              }
         };
         reader.onerror = (e) => {
             console.error("File reading error:", e);
             statusElement.textContent = 'Error reading file.';
+            // Hide clear button on file read error
+            if (clearButton && !clearButton.classList.contains('hidden')) {
+                clearButton.classList.add('hidden');
+                console.log('[Main] Clear button hidden - file read error.');
+            }
         };
         reader.readAsDataURL(file);
     } // <<< End of handleImageUpload
@@ -280,6 +324,11 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             // --- START TIMER HERE ---
             startTimer();
 
+            // --- SMOOTH SCROLL TO STATUS AREA ---
+            setTimeout(() => {
+                smoothScrollToStatus();
+            }, 100); // Small delay to ensure status text is updated first
+
             worker.postMessage({
                 type: 'DETECT',
                 payload: {
@@ -298,7 +347,8 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             // Reset timer
             resetTimer();
             
-            // Clear image
+            // Clear image back to default
+            isUserUpload = false; // Mark this as NOT a user upload
             imageElement.src = '/example.jpg'; // Reset to default image
             
             // Clear file input
@@ -308,19 +358,28 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
             
+            // Force hide clear button since we're back to default image
+            clearButton.classList.add('hidden');
+            console.log('[Main] Clear button forcibly hidden - back to default image.');
+            console.log('[Main] Clear button classes after hiding:', clearButton.classList.toString());
+            
             // Reset status
             if (isDetectorReady) {
-                statusElement.textContent = 'App reset. Model ready. Select an image.';
+                statusElement.textContent = 'App reset. Model successfully downloaded to device. Select an image.';
                 detectButton.disabled = false;
             } else {
                 statusElement.textContent = 'App reset. Waiting for model...';
                 detectButton.disabled = true;
             }
             
+            // --- SMOOTH SCROLL TO TOP ---
+            setTimeout(() => {
+                smoothScrollToTop();
+            }, 100); // Small delay to ensure reset is processed first
+            
             console.log('[Main] App state reset complete.');
         });
     }
-
 
     // Initial status update
     statusElement.textContent = 'App initialized. Waiting for worker...';
