@@ -1,8 +1,18 @@
 /* Reset / Basic body styling */
+:root {
+  --accent-primary: #646cff;
+  --accent-secondary: #535bf2;
+  --accent-success: #4ade80;
+  --accent-warning: #fbbf24;
+  --border-color: #555;
+  --border-accent: #646cff;
+}
+
 body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 1.6;
   font-weight: 400;
+  font-size: 16px; /* Increased from default */
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -15,11 +25,11 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
-  padding: 1rem; /* Add some padding */
-  box-sizing: border-box; /* Include padding in sizing */
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-/* Vite App container (optional styling) */
+/* Vite App container */
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -27,15 +37,33 @@ body {
   text-align: center;
 }
 
+/* Typography improvements */
+h1 {
+  font-size: 2.5rem; /* Increased size */
+  margin-bottom: 2rem; /* More spacing */
+  margin-top: 0;
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+p {
+  margin-bottom: 1.5rem; /* Increased spacing */
+  font-size: 1.1rem; /* Slightly larger */
+}
+
 /* Image container */
 #image-container {
   position: relative;
   display: inline-block;
   max-width: 90%;
-  border: 1px solid #555;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  border: 2px solid var(--border-accent); /* Accent border */
+  margin-top: 2rem; /* Increased margin */
+  margin-bottom: 2rem; /* Increased margin */
   vertical-align: top;
+  border-radius: 8px;
+  overflow: visible; /* Allow labels to show outside container */
+  padding: 1.5em; /* Add padding for label overflow space */
+  box-sizing: content-box; /* Ensure padding doesn't affect image size */
 }
 
 /* Image styling */
@@ -67,57 +95,83 @@ body {
 /* List styling */
 #detection-list-container {
     text-align: left;
-    margin-top: 1rem;
+    margin-top: 2rem; /* Increased spacing */
+    font-size: 1.1rem; /* Larger text */
 }
 #detection-list {
-    margin-top: 5px;
+    margin-top: 1rem; /* Increased spacing */
     padding-left: 20px;
 }
 
+#detection-list li {
+    margin-bottom: 0.5rem; /* Spacing between items */
+    color: var(--accent-success); /* Accent color for results */
+}
+
 /* Controls styling */
+.upload-controls {
+    margin-top: 2rem; /* Increased spacing */
+    margin-bottom: 1.5rem;
+}
+
 .upload-controls label {
   margin-right: 10px;
+  font-size: 1.1rem; /* Larger label */
+  font-weight: 500;
 }
 
 /* Button styling */
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  border: 2px solid var(--accent-primary); /* Accent border */
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   background-color: #1a1a1a;
+  color: var(--accent-primary); /* Accent text color */
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: all 0.25s ease; /* Smoother transition */
   margin-top: 1rem;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent-secondary);
+  color: var(--accent-secondary);
+  background-color: rgba(100, 108, 255, 0.1); /* Subtle background */
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 4px auto var(--accent-primary);
 }
 button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
-  border-color: transparent;
+  border-color: #555;
+  color: #888;
+  background-color: #1a1a1a;
 }
 
-/* Link styling (if any) */
+/* Link styling */
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--accent-primary);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--accent-secondary);
 }
 
 #timer-display {
-  min-height: 1.2em; /* Prevent layout shift when text appears/disappears */
-  color: #888; /* Dim color, or choose something bright */
+  min-height: 1.2em;
+  color: var(--accent-warning); /* Accent color for timer */
+  font-size: 1.1rem; /* Larger timer text */
+  margin-bottom: 1rem; /* More spacing */
+}
+
+/* Status styling */
+#status {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
 }
 
 /* Dark/Light theme consistency */
@@ -125,11 +179,26 @@ a:hover {
   :root {
     color: #213547;
     background-color: #ffffff;
+    --border-color: #ddd;
+    --border-accent: #646cff;
   }
+  
+  body {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  
+  #status {
+    color: #213547;
+  }
+  
   a:hover {
     color: #747bff;
   }
   button {
     background-color: #f9f9f9;
+  }
+  button:hover {
+    background-color: rgba(100, 108, 255, 0.1);
   }
 }
