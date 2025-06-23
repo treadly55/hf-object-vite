@@ -104,6 +104,7 @@ p {
     margin-top: 1rem; /* Increased spacing */
     padding-left: 0; /* Remove default padding for center alignment */
     list-style-position: inside; /* Keep bullets inside for center alignment */
+    margin-bottom: 3rem;
 }
 
 #detection-list li {
