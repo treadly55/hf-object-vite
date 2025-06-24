@@ -3,9 +3,11 @@
   "short_name": "Object Detection App",
   "description": "Local AI object detection in your browser",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
+  "orientation": "portrait-primary",
   "background_color": "#242424",
   "theme_color": "#646cff",
+  "scope": "/",
   "icons": [
     {
       "src": "/icon.svg",
