@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 isDetectorReady = true;
                 if (imageElement.src && imageElement.naturalWidth > 0) {
                     detectButton.disabled = false;
-                    statusElement.textContent = 'Model successfully downloaded to device. Ready to detect.';
+                    statusElement.textContent = 'Model downloaded to local device. Ready to detect.';
                 }
                 break;
 

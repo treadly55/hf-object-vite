@@ -142,8 +142,9 @@ p {
   transition: all 0.2s ease;
   margin: 0 auto;
   display: inline-block;
-  min-width: 200px;
-  max-width: 350px;
+  width: 100%;                    
+  max-width: 100%;                
+  box-sizing: border-box;         
   font-family: inherit;
   text-transform: none;
   letter-spacing: normal;
