@@ -6,7 +6,7 @@ The app uses the YOLO-tiny model and processes everything client-side for comple
 
 Users can upload images or use the default example, and the app will detect objects with confidence scores, displaying results as interactive bounding boxes overlaid on the image.
 
-**Working Example**
+**Working Example:**
 https://object-detection-ai-app.netlify.app/
 
 ## Tech Stack
@@ -19,10 +19,13 @@ https://object-detection-ai-app.netlify.app/
 
 ## How the AI detection process works
 
-**Model Download** → YOLO-tiny model downloads to user's browser on first load.
-**Web Worker Processing** → Image sent to background worker to prevent UI freezes
-**Local AI Inference** → YOLO model processes image entirely on device
-**Results Display** → Bounding boxes drawn on image with object labels and confidence scores
+**1. Model Download** → YOLO-tiny model downloads to user's browser on first load.
+
+**2. Web Worker Captures Task** → Image sent to background worker to prevent UI freezes
+
+**3. AI Model Runs Locally** → Objects identified in image and processed entirely on device
+
+**4. Results Display to User** → Bounding boxes drawn on image with labels and confidence scores
 
 ## AI model (YOLO-tiny) notes
 
