@@ -6,7 +6,7 @@ The app uses the YOLO-tiny model and processes everything client-side for comple
 
 Users can upload images or use the default example, and the app will detect objects with confidence scores, displaying results as interactive bounding boxes overlaid on the image.
 
-**Working Example**
+**Working Example:**
 https://object-detection-ai-app.netlify.app/
 
 ## Tech Stack
