@@ -6,14 +6,14 @@ import AiWorker from './worker.js?worker';
 
 console.log('[Main] Initializing main script.');
 
-document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContentLoaded listener
+document.addEventListener('DOMContentLoaded', () => { 
+    // START DOMContentLoaded listener
 
-    // --- State Variables ---
     let worker = null;
-    let isDetectorReady = false; // Track model readiness via worker
-    let timerIntervalId = null;  // To store the timer interval ID
-    let timerElapsedTime = 0;    // To store elapsed seconds for count-up
-    let isUserUpload = false;    // Track if current image is from user upload
+    let isDetectorReady = false; 
+    let timerIntervalId = null;  
+    let timerElapsedTime = 0;    
+    let isUserUpload = false;    
 
     // --- DOM Elements ---
     const statusElement = document.getElementById('status');
@@ -22,49 +22,42 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
     const imageContainer = document.getElementById('image-container');
     const fileInput = document.getElementById('image-upload');
     const detectionListElement = document.getElementById('detection-list');
-    const timerDisplayElement = document.getElementById('timer-display'); // Get timer display element
+    const timerDisplayElement = document.getElementById('timer-display'); 
 
     // --- Timer Functions ---
     function updateTimerDisplay() {
-        // Display elapsed time
         if (timerDisplayElement) {
-            // Show only when timer is active (intervalId is not null)
             timerDisplayElement.textContent = timerIntervalId !== null ? `Time elapsed: ${timerElapsedTime}s` : '';
         }
     }
 
     function resetTimer() {
-        // Clears interval, resets time, clears display
         if (timerIntervalId !== null) {
             clearInterval(timerIntervalId);
             timerIntervalId = null;
         }
         timerElapsedTime = 0;
-        updateTimerDisplay(); // Update display to clear it
+        updateTimerDisplay();
         console.log('[Main] Timer reset.');
     }
 
     function startTimer() {
-        resetTimer(); // Clear previous timer and reset value first
-        timerElapsedTime = 0; // Explicitly set to 0
-        updateTimerDisplay(); // Show "0s" immediately
+        resetTimer(); 
+        timerElapsedTime = 0; 
+        updateTimerDisplay(); 
 
-        // Start interval to increment elapsed time
         timerIntervalId = setInterval(() => {
             timerElapsedTime++;
-            updateTimerDisplay();
-            // console.log(`[Main] Timer tick: ${timerElapsedTime}`); // Optional debug log
-        }, 1000); // Update every 1 second
+            updateTimerDisplay();          
+        }, 1000); 
         console.log('[Main] Timer started.');
     }
 
     function stopTimer() {
-        // Clears interval, keeps last displayed value until reset
         if (timerIntervalId !== null) {
             clearInterval(timerIntervalId);
             timerIntervalId = null;
             console.log('[Main] Timer stopped.');
-            // Optionally update status or display final time
              if (timerDisplayElement) {
                 timerDisplayElement.textContent += ` (Completed)`;
              }
@@ -99,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
     // --- Initialize Worker ---
     try {
         statusElement.textContent = 'Initializing background processor...';
-        resetTimer(); // Ensure timer is reset/cleared on initial load
-        worker = new AiWorker(); // Instantiate worker imported via Vite syntax
+        resetTimer(); 
+        worker = new AiWorker(); 
         console.log('[Main] AI Worker instance created.');
 
         worker.postMessage({ type: 'LOAD_MODEL' });
@@ -122,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
         switch (message.type) {
             case 'STATUS_UPDATE':
-                // Avoid overwriting status if timer is actively mentioned
                 if (!statusElement.textContent.includes('Timer Running')) {
                     statusElement.textContent = message.payload;
                 }
@@ -179,7 +171,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                     }
                 }
                 
-                // Show detection results container after detection completes
                 const detectionListContainer = document.getElementById('detection-list-container');
                 if (detectionListContainer) {
                     detectionListContainer.style.display = 'block';
@@ -188,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 
                 // --- STOP TIMER HERE ---
                 stopTimer();
-                detectButton.disabled = false; // Re-enable button
+                detectButton.disabled = false; 
                 break;
 
             case 'ERROR':
@@ -196,14 +187,14 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 console.error('[Main] Error message from worker:', message.payload);
                 isDetectorReady = false;
                 detectButton.disabled = true;
-                resetTimer(); // Reset timer on error
+                resetTimer();
                 break;
 
             default:
                 console.log('[Main] Message received from AI worker (unhandled type):', message);
                 console.warn('[Main] Received unknown message type from worker:', message.type);
         }
-    }; // <<< End of worker.onmessage handler
+    }; 
 
     worker.onerror = (error) => {
         console.error('[Main] Critical worker error:', error.message, error);
@@ -211,17 +202,16 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         isDetectorReady = false;
         detectButton.disabled = true;
         if (fileInput) fileInput.disabled = true;
-        resetTimer(); // Reset timer on critical worker error
-    }; // <<< End of worker.onerror handler
+        resetTimer(); 
+    }; 
 
-    // --- UI Helper Functions --- (Keep drawObjectBox and clearBoundingBoxes as they were)
+    // --- UI Helper Functions --- 
     function clearBoundingBoxes() {
         const existingBoxes = imageContainer.querySelectorAll('.bounding-box');
         existingBoxes.forEach(box => box.remove());
-    } // <<< End of clearBoundingBoxes
+    } 
 
     function drawObjectBox(detectedObject) {
-        // ... (drawObjectBox function code remains the same) ...
         const { label, score, box } = detectedObject;
         const { xmax, xmin, ymax, ymin } = box;
         const color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
@@ -240,11 +230,11 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         labelElement.style.backgroundColor = color;
         boxElement.appendChild(labelElement);
         imageContainer.appendChild(boxElement);
-    } // <<< End of drawObjectBox
+    } 
 
     // --- Event Handlers ---
     function handleImageUpload(event) {
-        resetTimer(); // <<< RESET TIMER HERE
+        resetTimer(); 
         const file = event.target.files[0];
         const clearButton = document.getElementById('clear-button');
         const detectionListContainer = document.getElementById('detection-list-container');
@@ -255,8 +245,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             detectButton.disabled = true;
             clearBoundingBoxes();
             if (detectionListElement) detectionListElement.innerHTML = '';
-            
-            // Hide detection results and clear button when no valid file is selected
             if (detectionListContainer) detectionListContainer.style.display = 'none';
             if (clearButton && !clearButton.classList.contains('hidden')) {
                 clearButton.classList.add('hidden');
@@ -267,7 +255,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
         clearBoundingBoxes();
         if (detectionListElement) detectionListElement.innerHTML = '';
-        // Hide detection results when new image is loaded
         if (detectionListContainer) detectionListContainer.style.display = 'none';
         
         statusElement.textContent = 'Loading image...';
@@ -275,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
 
         const reader = new FileReader();
         reader.onload = (e) => {
-            isUserUpload = true; // Mark this as a user upload
+            isUserUpload = true; 
             imageElement.src = e.target.result;
             imageElement.onload = () => {
                 if (isDetectorReady) {
@@ -285,7 +272,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                     statusElement.textContent = 'Image loaded. Waiting for model...';
                 }
                 
-                // Show clear button ONLY for user uploads
                 if (isUserUpload && clearButton && clearButton.classList.contains('hidden')) {
                     clearButton.classList.remove('hidden');
                     console.log('[Main] Clear button now visible - user uploaded image.');
@@ -293,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
             };
              imageElement.onerror = () => {
                  statusElement.textContent = 'Error displaying image.';
-                 // Hide clear button on image load error
                  if (clearButton && !clearButton.classList.contains('hidden')) {
                      clearButton.classList.add('hidden');
                      console.log('[Main] Clear button hidden - image load error.');
@@ -303,19 +288,18 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
         reader.onerror = (e) => {
             console.error("File reading error:", e);
             statusElement.textContent = 'Error reading file.';
-            // Hide clear button on file read error
             if (clearButton && !clearButton.classList.contains('hidden')) {
                 clearButton.classList.add('hidden');
                 console.log('[Main] Clear button hidden - file read error.');
             }
         };
         reader.readAsDataURL(file);
-    } // <<< End of handleImageUpload
+    } 
 
     // --- Attach Event Listeners ---
     if (fileInput) {
         fileInput.addEventListener('change', handleImageUpload);
-    } // <<< End of fileInput if block
+    } 
 
     if (detectButton) {
         detectButton.addEventListener('click', () => {
@@ -339,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => { // <<< START of DOMContent
                 detectionListContainer.style.display = 'none';
             }
 
-            // --- START TIMER HERE ---
+            // --- START TIMER ---
             startTimer();
 
             // --- SMOOTH SCROLL TO STATUS AREA ---

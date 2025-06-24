@@ -1,0 +1,17 @@
+{
+  "name": "Object Detection App",
+  "short_name": "Object Detection App",
+  "description": "Local AI object detection in your browser",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#242424",
+  "theme_color": "#646cff",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

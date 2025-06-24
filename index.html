@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Object Detector</title>
     <link rel="stylesheet" href="/src/style.css">
@@ -10,37 +10,30 @@
   <body>
     <div id="app">
       <h1>AI Object Detector</h1>
-
       <div class="status-section">
-        <p><strong>How it works:</strong><br />Upload your own image or use the placeholder image to watch the AI object detector in action.</p>
+        <p><strong>How it works:</strong><br />Upload a custom image, or use the included image to see the object detector in action.<br/><br />The application works best with images that are ~5mb or less.</p>
         <div class="status-header">Status</div>
         <p id="status">Initializing...</p>
       </div>
-
       <div id="timer-display" style="margin-top: 10px; font-weight: bold;"></div>
-
       <div id="image-container">
         <img id="test-image" src="/example.jpg" alt="Test image for detection"/>
       </div>
-
       <div id="detection-list-container" style="margin-top: 15px;">
         Detected Objects:
         <ul id="detection-list">
         </ul>
       </div>
-
-      <div class="upload-controls" style="margin-top: 15px;">
+      <div class="upload-controls">
         <label for="image-upload">Upload image:</label>
-        <input type="file" id="image-upload" accept="image/*" style="margin-bottom: 10px;">
+        <input type="file" id="image-upload" accept="image/*">
       </div>
-
       <div class="button-container">
         <button id="detect-button" disabled>Detect Objects</button>
         <div class="detection-notice">Detection takes approximately 20 seconds</div>
         <button id="clear-button" class="hidden">Clear Image & Restart</button>
       </div>
     </div>
-
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -1,4 +1,3 @@
-/* Reset / Basic body styling */
 :root {
   --accent-primary: #646cff;
   --accent-secondary: #535bf2;
@@ -6,14 +5,14 @@
   --accent-warning: #fbbf24;
   --border-color: #555;
   --border-accent: #646cff;
-  scroll-behavior: smooth; /* Enable smooth scrolling globally */
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.6;
   font-weight: 400;
-  font-size: 16px; /* Increased from default */
+  font-size: 16px;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
@@ -30,7 +29,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Vite App container */
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -38,46 +36,42 @@ body {
   text-align: center;
 }
 
-/* Typography improvements */
 h1 {
-  font-size: 2.5rem; /* Increased size */
-  margin-bottom: 2rem; /* More spacing */
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
   margin-top: 0;
   color: var(--accent-primary);
   font-weight: 600;
 }
 
 p {
-  margin-bottom: 1.5rem; /* Increased spacing */
-  font-size: 1.1rem; /* Slightly larger */
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
 }
 
-/* Image container */
 #image-container {
   position: relative;
   display: inline-block;
   max-width: 90%;
-  border: 2px solid var(--border-accent); /* Accent border */
-  margin-top: 2rem; /* Increased margin */
-  margin-bottom: 2rem; /* Increased margin */
+  border: 2px solid var(--border-accent);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   vertical-align: top;
   border-radius: 8px;
-  overflow: visible; /* Allow labels to show outside container */
-  padding: 1.5em; /* Add padding for label overflow space */
-  box-sizing: content-box; /* Ensure padding doesn't affect image size */
+  overflow: visible;
+  padding: 1.5em;
+  box-sizing: content-box;
 }
 
-/* Image styling */
 #test-image {
   display: block;
   max-width: 100%;
   height: auto;
 }
 
-/* Bounding Box Styles */
 .bounding-box {
   position: absolute;
-  border: 2px solid red; /* Default, JS overrides */
+  border: 2px solid red;
   box-sizing: border-box;
   pointer-events: none;
 }
@@ -90,37 +84,36 @@ p {
   font-size: 0.8em;
   padding: 2px 4px;
   white-space: nowrap;
-  background-color: red; /* Default, JS overrides */
+  background-color: red;
 }
 
-/* List styling */
 #detection-list-container {
-    text-align: center; /* Center align the section */
-    margin-top: 2rem; /* Increased spacing */
-    font-size: 1.1rem; /* Larger text */
-    display: none; /* Hidden by default */
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    display: none;
 }
+
 #detection-list {
-    margin-top: 1rem; /* Increased spacing */
-    padding-left: 0; /* Remove default padding for center alignment */
-    list-style-position: inside; /* Keep bullets inside for center alignment */
+    margin-top: 1rem;
+    padding-left: 0;
+    list-style-position: inside;
     margin-bottom: 3rem;
 }
 
 #detection-list li {
-    margin-bottom: 0.5rem; /* Spacing between items */
-    color: var(--accent-success); /* Accent color for results */
-    text-align: center; /* Center align individual items */
+    margin-bottom: 0.5rem;
+    color: var(--accent-success);
+    text-align: center;
 }
 
-/* Controls styling */
 .upload-controls {
-    margin-top: 2rem; /* Increased spacing */
+    margin-top: 2rem;
     margin-bottom: 2rem;
-    text-align: center; /* Center the upload section */
+    text-align: center;
     padding: 2rem;
-    background-color: rgba(255, 255, 255, 0.05); /* Subtle background */
-    border: 1px solid #444; /* Neutral border */
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid #444;
     border-radius: 12px;
     max-width: 400px;
     margin-left: auto;
@@ -128,87 +121,83 @@ p {
 }
 
 .upload-controls label {
-  display: block; /* Stack label above input */
-  margin-bottom: 1.5rem; /* Space between label and input */
-  font-size: 1.1rem; /* Professional size */
+  display: block;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 500;
-  color: #e0e0e0; /* Neutral light gray */
-  text-transform: none; /* Keep normal case for formal look */
+  color: #e0e0e0;
+  text-transform: none;
   letter-spacing: normal;
 }
 
-/* File input styling - Formal appearance */
 #image-upload {
-  padding: 0.8rem 1.5rem; /* Professional padding */
-  font-size: 1rem; /* Standard readable size */
-  border: 2px solid #666; /* Neutral gray border */
-  border-radius: 6px; /* Subtle rounding */
-  background-color: #2a2a2a; /* Darker neutral background */
-  color: #e0e0e0; /* Light gray text */
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  border: 2px solid #666;
+  border-radius: 6px;
+  background-color: #2a2a2a;
+  color: #e0e0e0;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin: 0 auto; /* Center the input */
+  margin: 0 auto;
   display: inline-block;
-  min-width: 200px; /* Minimum width for consistency */
-  font-family: inherit; /* Match body font */
-  text-transform: none; /* Normal case */
+  min-width: 200px;
+  font-family: inherit;
+  text-transform: none;
   letter-spacing: normal;
 }
 
 #image-upload:hover {
-  border-color: #888; /* Lighter gray on hover */
-  background-color: #333; /* Slightly lighter background */
+  border-color: #888;
+  background-color: #333;
 }
 
 #image-upload:focus {
-  outline: 2px solid #999; /* Neutral focus outline */
+  outline: 2px solid #999;
   outline-offset: 2px;
   border-color: #999;
 }
 
-/* Button styling */
 button {
   border-radius: 8px;
-  border: 2px solid var(--accent-primary); /* Accent border */
-  padding: 1rem 2rem; /* Much bigger padding */
-  font-size: 1.2rem; /* Larger font size */
-  font-weight: 600; /* Bolder text */
+  border: 2px solid var(--accent-primary);
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
   font-family: inherit;
   background-color: #1a1a1a;
-  color: var(--accent-primary); /* Accent text color */
+  color: var(--accent-primary);
   cursor: pointer;
-  transition: all 0.25s ease; /* Smoother transition */
-  margin-top: 1rem; /* Vertical spacing between buttons */
-  margin-left: 0; /* Remove horizontal margins */
-  margin-right: 0; /* Remove horizontal margins */
-  min-width: 250px; /* Slightly wider for stacked layout */
-  width: 100%; /* Full width within container */
-  max-width: 300px; /* Maximum width limit */
-  text-transform: uppercase; /* Make text more prominent */
-  letter-spacing: 0.5px; /* Slight letter spacing */
-  display: block; /* Ensure buttons stack */
-  margin-left: auto; /* Center buttons */
-  margin-right: auto; /* Center buttons */
+  transition: all 0.25s ease;
+  margin-top: 1rem;
+  margin-left: 0;
+  margin-right: 0;
+  min-width: 250px;
+  width: 100%;
+  max-width: 300px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Button container for better control */
 .button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem; /* Space between stacked elements */
+  gap: 1rem;
   margin-top: 2rem;
 }
 
 #detect-button {
-  order: 1; /* First button */
+  order: 1;
 }
 
 #clear-button {
-  order: 3; /* Last button */
+  order: 3;
 }
 
-/* Clear button specific styling */
 #clear-button {
   border-color: var(--accent-warning);
   color: var(--accent-warning);
@@ -219,15 +208,18 @@ button {
   color: #fbbf24;
   background-color: rgba(251, 191, 36, 0.1);
 }
+
 button:hover {
   border-color: var(--accent-secondary);
   color: var(--accent-secondary);
-  background-color: rgba(100, 108, 255, 0.1); /* Subtle background */
+  background-color: rgba(100, 108, 255, 0.1);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto var(--accent-primary);
 }
+
 button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
@@ -236,26 +228,25 @@ button:disabled {
   background-color: #1a1a1a;
 }
 
-/* Link styling */
 a {
   font-weight: 500;
   color: var(--accent-primary);
   text-decoration: inherit;
 }
+
 a:hover {
   color: var(--accent-secondary);
 }
 
 #timer-display {
   min-height: 1.2em;
-  color: var(--accent-warning); /* Accent color for timer */
-  font-size: 1.4rem; /* Much larger timer text */
-  font-weight: 600; /* Bolder for prominence */
-  margin-bottom: 1rem; /* More spacing */
-  text-align: center; /* Center the timer */
+  color: var(--accent-warning);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
-/* Status styling */
 .status-section {
   margin: 2rem 0;
   text-align: center;
@@ -283,10 +274,9 @@ a:hover {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   text-align: center;
-  order: 2; /* Place between buttons in flex container */
+  order: 2;
 }
 
-/* Dark/Light theme consistency */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -315,7 +305,6 @@ a:hover {
   }
 }
 
-/* Utility Classes */
 .hidden {
   display: none !important;
 }

@@ -4,25 +4,21 @@ console.log('[Worker] Worker script starting.');
 // Import pipeline and env from the installed package
 import { pipeline, env } from '@xenova/transformers';
 
-// Define pipeline and env in the worker's scope (redundant but clear)
+// Define pipeline and env in the worker's scope
 let modelPipeline, environment;
-let detector = null; // Model pipeline instance
+let detector = null; 
 let libraryLoaded = false;
 
 try {
     modelPipeline = pipeline;
     environment = env;
-    // Configure environment - vital for WASM backend finding potentially
-    environment.allowLocalModels = false; // Use remote models from Hugging Face
-    // environment.backends.onnx.wasm.wasmPaths = '/'; // Vite should handle WASM assets, usually no need to set this explicitly when bundling
-
+    environment.allowLocalModels = false; 
     libraryLoaded = true;
     console.log('[Worker] Transformers library access configured.');
 } catch(error) {
     console.error('[Worker] Failed during library setup:', error);
     self.postMessage({ type: 'ERROR', payload: `Worker setup failed: ${error.message}` });
 }
-
 
 // Message Handler
 self.onmessage = async (event) => {
@@ -76,7 +72,7 @@ self.onmessage = async (event) => {
 
             try {
                 const output = await detector(message.payload.imageSrc, {
-                    threshold: 0.5, // Adjusted threshold slightly higher
+                    threshold: 0.5, 
                     percentage: true
                 });
                 console.log('[Worker] Detection complete.');
