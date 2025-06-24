@@ -7,14 +7,14 @@ The app uses the YOLO-tiny model and processes everything client-side for comple
 Users can upload images or use the default example, and the app will detect objects with confidence scores, displaying results as interactive bounding boxes overlaid on the image.
 
 **Working Example**
-[https://object-detection-ai-app.netlify.app/]
+https://object-detection-ai-app.netlify.app/
 
 ## Tech Stack
 
 * **Frontend**: Vanilla JavaScript, CSS, HTML
 * **Build Tool**: Vite (ES6 modules, hot reload)
 * **AI Processing**: Web Worker with @xenova/transformers
-* **Model**: Xenova/yolos-tiny (YOLO object detection)
+* **Model**: Xenova/yolos-tiny (YOLO object detection) - https://huggingface.co/Xenova/yolos-tiny
 * **Deployment**: Netlify
 
 ## How the AI detection process works
@@ -24,14 +24,14 @@ Users can upload images or use the default example, and the app will detect obje
 **Local AI Inference** → YOLO model processes image entirely on device
 **Results Display** → Bounding boxes drawn on image with object labels and confidence scores
 
-## YOLO AI model notes
+## AI model (YOLO-tiny) notes
 
 The YOLO-tiny model can detect 80+ common objects including:
 - People, animals, vehicles
 - Furniture, electronics, sports equipment  
 - Food items, household objects, etc
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 object-detection-app/
@@ -84,6 +84,6 @@ npm run preview
 - **Detection Time**: ~15-25 seconds per image depending on device performance
 - **Memory Usage**: ~200-400MB RAM during processing
 
-## 📄 License
+## License
 
-This project is licensed under the [MIT License.(LICENSE)]
+This project is licensed under the [MIT License](LICENSE).
